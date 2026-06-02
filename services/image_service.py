@@ -3,30 +3,40 @@ from torchvision import transforms, models
 from PIL import Image
 from torch import nn
 
-# Device
 device = torch.device(
     "cuda" if torch.cuda.is_available() else "cpu"
 )
 
-# Load Model
-model = models.resnet18(weights=None)
+_model = None
 
-model.fc = nn.Linear(
-    model.fc.in_features,
-    2
-)
 
-model.load_state_dict(
-    torch.load(
-        "models/xray_model.pth",
-        map_location=device
-    )
-)
+def get_model():
+    global _model
 
-model.to(device)
-model.eval()
+    if _model is None:
 
-# Image Transform
+        model = models.resnet18(weights=None)
+
+        model.fc = nn.Linear(
+            model.fc.in_features,
+            2
+        )
+
+        model.load_state_dict(
+            torch.load(
+                "models/xray_model.pth",
+                map_location=device
+            )
+        )
+
+        model.to(device)
+        model.eval()
+
+        _model = model
+
+    return _model
+
+
 transform = transforms.Compose([
     transforms.Resize((224, 224)),
     transforms.ToTensor()
@@ -36,6 +46,8 @@ transform = transforms.Compose([
 def analyze_xray(image_path):
 
     try:
+
+        model = get_model()
 
         image = Image.open(
             image_path
