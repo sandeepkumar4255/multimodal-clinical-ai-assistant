@@ -1,0 +1,120 @@
+Pneumonia
+Overview
+
+Pneumonia is an infection that causes inflammation of the air sacs (alveoli) in one or both lungs. The air sacs may fill with fluid or pus, making breathing difficult and reducing oxygen exchange. Pneumonia can be caused by bacteria, viruses, or fungi and ranges from mild to life-threatening.
+
+Symptoms
+
+Common symptoms of pneumonia include:
+
+Cough
+Fever
+Chills
+Shortness of breath
+Chest pain during breathing or coughing
+Fatigue
+Rapid breathing
+Increased heart rate
+Low oxygen saturation
+
+In severe cases, patients may experience confusion, respiratory distress, or cyanosis.
+
+Risk Factors
+Non-Modifiable Risk Factors
+Age over 65 years
+Infants and young children
+Chronic medical conditions
+Weakened immune system
+Modifiable Risk Factors
+Smoking
+Excessive alcohol use
+Poor nutrition
+Exposure to air pollution
+Lack of vaccination
+Causes
+
+Pneumonia may be caused by:
+
+Bacterial Pneumonia
+Streptococcus pneumoniae
+Haemophilus influenzae
+Viral Pneumonia
+Influenza virus
+Respiratory Syncytial Virus (RSV)
+Coronavirus
+Fungal Pneumonia
+Histoplasma
+Pneumocystis jirovecii
+Diagnosis
+
+Diagnostic methods include:
+
+Chest X-Ray
+
+Used to identify lung infiltrates and areas of infection.
+
+Physical Examination
+
+Assessment of breathing sounds and respiratory status.
+
+Blood Tests
+White blood cell count
+Inflammatory markers
+Blood cultures
+Pulse Oximetry
+
+Measures oxygen saturation levels.
+
+Sputum Analysis
+
+Identifies infectious organisms.
+
+Treatment
+Lifestyle and Supportive Care
+Adequate rest
+Hydration
+Oxygen support when required
+Medications
+Bacterial Pneumonia
+Antibiotics
+Viral Pneumonia
+Antiviral medications
+Supportive treatment
+Severe Cases
+Hospitalization
+Intravenous fluids
+Mechanical ventilation
+Complications
+
+Untreated pneumonia may lead to:
+
+Respiratory failure
+Sepsis
+Lung abscess
+Pleural effusion
+Acute Respiratory Distress Syndrome (ARDS)
+Prevention
+Annual influenza vaccination
+Pneumococcal vaccination
+Hand hygiene
+Smoking cessation
+Healthy lifestyle
+Early treatment of respiratory infections
+Clinical Relevance for AI Clinical Assistant
+
+Important indicators suggesting pneumonia:
+
+Cough
+Fever
+Shortness of breath
+Chest pain
+Low oxygen saturation
+Abnormal chest X-ray findings
+
+Recommended actions:
+
+Chest X-ray evaluation
+Oxygen saturation monitoring
+Medical consultation
+Appropriate antibiotic or antiviral therapy
+Risk assessment using symptoms, imaging, and clinical findings

@@ -1,0 +1,12 @@
+venv/
+
+__pycache__/
+*.pyc
+
+.env
+
+uploads/
+
+.vscode/
+
+datasets/chest_xray/

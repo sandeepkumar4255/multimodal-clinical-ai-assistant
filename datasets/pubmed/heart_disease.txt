@@ -1,0 +1,130 @@
+Coronary Artery Disease (CAD)
+Overview
+
+Coronary Artery Disease (CAD) is a cardiovascular condition caused by the buildup of atherosclerotic plaque within the coronary arteries. The narrowing of these arteries reduces blood flow and oxygen supply to the heart muscle. CAD is one of the leading causes of morbidity and mortality worldwide.
+
+Symptoms
+
+Common symptoms of CAD include:
+
+Chest pain (angina)
+Shortness of breath
+Fatigue
+Dizziness
+Nausea
+Pain radiating to the neck, jaw, shoulder, or arm
+
+Some patients may have atypical symptoms or remain asymptomatic.
+
+Risk Factors
+Non-Modifiable Risk Factors
+Increasing age
+Male gender
+Family history of heart disease
+Genetic predisposition
+Modifiable Risk Factors
+Hypertension
+High cholesterol
+Smoking
+Obesity
+Diabetes mellitus
+Physical inactivity
+Unhealthy diet
+Stress
+Pathophysiology
+
+CAD develops when fatty deposits accumulate in the walls of coronary arteries.
+
+Process:
+
+Endothelial injury
+LDL cholesterol deposition
+Foam cell formation
+Plaque development
+Arterial narrowing
+Reduced blood flow to the myocardium
+
+Plaque rupture may lead to blood clot formation and acute myocardial infarction.
+
+Diagnosis
+
+Diagnostic methods include:
+
+Electrocardiogram (ECG)
+
+Used to detect abnormal electrical activity and signs of ischemia.
+
+Echocardiography
+
+Evaluates heart structure and function.
+
+Stress Testing
+
+Assesses heart performance during exercise or induced stress.
+
+Coronary Angiography
+
+Gold standard for identifying coronary artery blockages.
+
+Blood Tests
+Troponin
+Lipid profile
+C-reactive protein
+Blood glucose
+Treatment
+Lifestyle Modification
+Smoking cessation
+Weight management
+Healthy diet
+Regular exercise
+Blood pressure control
+Diabetes management
+Medications
+Aspirin
+Statins
+Beta-blockers
+ACE inhibitors
+Nitroglycerin
+Interventional Procedures
+Percutaneous Coronary Intervention (PCI)
+
+Insertion of coronary stents to improve blood flow.
+
+Coronary Artery Bypass Grafting (CABG)
+
+Surgical bypass of blocked coronary arteries.
+
+Complications
+
+Untreated CAD may lead to:
+
+Myocardial infarction (heart attack)
+Heart failure
+Arrhythmias
+Mitral regurgitation
+Sudden cardiac death
+Prevention
+Maintain healthy cholesterol levels
+Control blood pressure
+Avoid smoking
+Exercise regularly
+Maintain healthy body weight
+Manage diabetes
+Follow a heart-healthy diet
+Clinical Relevance for AI Clinical Assistant
+
+Important indicators suggesting CAD:
+
+Chest pain
+Shortness of breath
+High cholesterol
+Hypertension
+Diabetes
+Smoking history
+
+Recommended actions:
+
+ECG evaluation
+Lipid profile testing
+Cardiology consultation
+Risk assessment using clinical data and laboratory findings
