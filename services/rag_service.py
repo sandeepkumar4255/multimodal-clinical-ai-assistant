@@ -1,59 +1,61 @@
-import os
+import faiss
+import pickle
+import numpy as np
+
+from utils.embeddings import create_embedding
+
+_index = None
+_documents = None
 
 
-def retrieve_documents(query, top_k=3):
+def load_rag():
 
-    query = query.lower()
+    global _index
+    global _documents
 
-    keyword_mapping = {
-        "heart disease": "datasets/pubmed/heart_disease.txt",
-        "coronary artery disease": "datasets/pubmed/heart_disease.txt",
-        "chest pain": "datasets/pubmed/heart_disease.txt",
-        "hypertension": "datasets/pubmed/heart_disease.txt",
-        "high cholesterol": "datasets/pubmed/heart_disease.txt",
-        "angina": "datasets/pubmed/heart_disease.txt",
+    if _index is None:
 
-        "pneumonia": "datasets/pubmed/pneumonia.txt",
-        "cough": "datasets/pubmed/pneumonia.txt",
-        "fever": "datasets/pubmed/pneumonia.txt",
-        "shortness of breath": "datasets/pubmed/pneumonia.txt"
-    }
+        _index = faiss.read_index(
+            "vector_store/faiss.index"
+        )
 
-    selected_files = set()
+        with open(
+            "vector_store/documents.pkl",
+            "rb"
+        ) as file:
 
-    for keyword, file_path in keyword_mapping.items():
+            _documents = pickle.load(file)
 
-        if keyword in query:
-            selected_files.add(file_path)
+    return _index, _documents
 
-    # Healthy patient → no evidence
-    if not selected_files:
-        return []
+
+def retrieve_documents(
+    query,
+    top_k=3
+):
+
+    index, documents = load_rag()
+
+    query_embedding = np.array(
+        [create_embedding(query)]
+    ).astype("float32")
+
+    distances, indices = index.search(
+        query_embedding,
+        top_k
+    )
 
     results = []
 
-    for file_path in selected_files:
+    for idx in indices[0]:
 
-        try:
+        if (
+            idx >= 0 and
+            idx < len(documents)
+        ):
 
-            if os.path.exists(file_path):
-
-                with open(
-                    file_path,
-                    "r",
-                    encoding="utf-8"
-                ) as file:
-
-                    content = file.read()
-
-                    results.append(
-                        content[:1000]
-                    )
-
-        except Exception as e:
-
-            print(
-                f"RAG Error: {str(e)}"
+            results.append(
+                documents[idx]
             )
 
-    return results[:top_k]
+    return results

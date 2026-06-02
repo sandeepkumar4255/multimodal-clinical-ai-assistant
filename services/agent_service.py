@@ -34,9 +34,14 @@ def run_clinical_pipeline(
     # ML Prediction
     risk_score = predict_heart_risk(patient_data)
 
-    # RAG Evidence
-    evidence = retrieve_documents(
-         patient_notes,
+    if risk_score < 0.30:
+
+        evidence = []
+
+    else:
+
+        evidence = retrieve_documents(
+        patient_notes,
         top_k=2
     )
 

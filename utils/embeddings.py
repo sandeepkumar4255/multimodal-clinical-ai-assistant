@@ -1,12 +1,22 @@
-from sklearn.feature_extraction.text import HashingVectorizer
+from sentence_transformers import SentenceTransformer
 
-vectorizer = HashingVectorizer(
-    n_features=384,
-    alternate_sign=False
-)
+_model = None
+
+def get_embedding_model():
+
+    global _model
+
+    if _model is None:
+
+        _model = SentenceTransformer(
+            "paraphrase-MiniLM-L3-v2"
+        )
+
+    return _model
+
 
 def create_embedding(text):
 
-    vector = vectorizer.transform([text])
+    model = get_embedding_model()
 
-    return vector.toarray()[0]
+    return model.encode(text)

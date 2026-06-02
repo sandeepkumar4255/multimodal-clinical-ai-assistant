@@ -1,62 +1,82 @@
-from torchvision import datasets, transforms, models
-from torch import nn, optim
-from torch.utils.data import DataLoader
 import torch
+import torch.nn as nn
+import torch.optim as optim
 
-# Image Transform
+from torchvision import datasets, transforms
+from torch.utils.data import DataLoader
+
+
+class TinyCNN(nn.Module):
+
+    def __init__(self):
+        super().__init__()
+
+        self.features = nn.Sequential(
+            nn.Conv2d(3, 16, 3, padding=1),
+            nn.ReLU(),
+            nn.MaxPool2d(2),
+
+            nn.Conv2d(16, 32, 3, padding=1),
+            nn.ReLU(),
+            nn.MaxPool2d(2),
+
+            nn.Conv2d(32, 64, 3, padding=1),
+            nn.ReLU(),
+            nn.MaxPool2d(2)
+        )
+
+        self.classifier = nn.Sequential(
+            nn.Flatten(),
+            nn.Linear(64 * 16 * 16, 64),
+            nn.ReLU(),
+            nn.Linear(64, 2)
+        )
+
+    def forward(self, x):
+
+        x = self.features(x)
+        x = self.classifier(x)
+
+        return x
+
+
 transform = transforms.Compose([
-    transforms.Resize((224, 224)),
+    transforms.Resize((128, 128)),
     transforms.ToTensor()
 ])
 
-# Dataset
 train_dataset = datasets.ImageFolder(
-    "datasets/chest_xray/train",
+    r"C:\multimodal_dataset_backup\chest_xray\train",
     transform=transform
 )
 
-# Data Loader
+
 train_loader = DataLoader(
     train_dataset,
     batch_size=16,
     shuffle=True
 )
 
-# Device
 device = torch.device(
     "cuda" if torch.cuda.is_available() else "cpu"
 )
 
-# Model
-model = models.resnet18(weights="DEFAULT")
+model = TinyCNN().to(device)
 
-model.fc = nn.Linear(
-    model.fc.in_features,
-    2
-)
-
-model.to(device)
-
-# Loss and Optimizer
 criterion = nn.CrossEntropyLoss()
 
 optimizer = optim.Adam(
     model.parameters(),
-    lr=0.0001
+    lr=0.001
 )
 
-print("Training Started...")
-print(f"Device: {device}")
-print(f"Total Images: {len(train_dataset)}")
-
-# Train (1 Epoch for Testing)
-for epoch in range(1):
+for epoch in range(5):
 
     model.train()
 
-    running_loss = 0.0
+    running_loss = 0
 
-    for batch_idx, (images, labels) in enumerate(train_loader):
+    for images, labels in train_loader:
 
         images = images.to(device)
         labels = labels.to(device)
@@ -76,24 +96,14 @@ for epoch in range(1):
 
         running_loss += loss.item()
 
-        if (batch_idx + 1) % 20 == 0:
-
-            print(
-                f"Epoch {epoch+1} | "
-                f"Batch {batch_idx+1}/{len(train_loader)} | "
-                f"Loss: {loss.item():.4f}"
-            )
-
     print(
-        f"Epoch {epoch+1} Completed | "
-        f"Average Loss: {running_loss/len(train_loader):.4f}"
+        f"Epoch {epoch+1}:",
+        running_loss
     )
 
-# Save Model
 torch.save(
     model.state_dict(),
     "models/xray_model.pth"
 )
 
-print("Model Saved Successfully!")
-print("Saved at: models/xray_model.pth")
+print("Model Saved")
