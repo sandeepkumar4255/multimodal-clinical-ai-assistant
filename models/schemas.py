@@ -6,20 +6,6 @@ class PatientRequest(BaseModel):
 
     text: str = ""
 
-    age: int
-    sex: int
-    cp: int
-    trestbps: int
-    chol: int
-    fbs: int
-    restecg: int
-    thalach: int
-    exang: int
-    oldpeak: float
-    slope: int
-    ca: int
-    thal: int
-
     image_path: Optional[str] = None
     pdf_path: Optional[str] = None
 
