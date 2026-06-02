@@ -35,7 +35,10 @@ def run_clinical_pipeline(
     risk_score = predict_heart_risk(patient_data)
 
     # RAG Evidence
-    evidence = retrieve_documents(patient_notes)
+    evidence = retrieve_documents(
+         patient_notes,
+        top_k=2
+    )
 
     # LLM Recommendation
     recommendation = generate_response(
