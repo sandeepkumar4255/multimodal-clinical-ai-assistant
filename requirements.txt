@@ -15,7 +15,6 @@ joblib
 
 sentence-transformers
 transformers
-torch
 faiss-cpu
 
 langchain
@@ -24,4 +23,3 @@ langchain-community
 groq
 
 python-docx
-torchvision
