@@ -13,12 +13,7 @@ scikit-learn
 xgboost
 joblib
 
-sentence-transformers
-transformers
-faiss-cpu
 
-langchain
-langchain-community
 
 groq
 
