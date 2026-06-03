@@ -1,61 +1,34 @@
-import faiss
-import pickle
-import numpy as np
+import os
 
-from utils.embeddings import create_embedding
+def retrieve_documents(query, top_k=2):
 
-_index = None
-_documents = None
+    query = query.lower()
 
+    keyword_mapping = {
+        "heart disease": "datasets/pubmed/heart_disease.txt",
+        "coronary artery disease": "datasets/pubmed/heart_disease.txt",
+        "chest pain": "datasets/pubmed/heart_disease.txt",
+        "hypertension": "datasets/pubmed/heart_disease.txt",
 
-def load_rag():
+        "pneumonia": "datasets/pubmed/pneumonia.txt",
+        "cough": "datasets/pubmed/pneumonia.txt",
+        "fever": "datasets/pubmed/pneumonia.txt",
+        "shortness of breath": "datasets/pubmed/pneumonia.txt"
+    }
 
-    global _index
-    global _documents
+    selected_files = set()
 
-    if _index is None:
-
-        _index = faiss.read_index(
-            "vector_store/faiss.index"
-        )
-
-        with open(
-            "vector_store/documents.pkl",
-            "rb"
-        ) as file:
-
-            _documents = pickle.load(file)
-
-    return _index, _documents
-
-
-def retrieve_documents(
-    query,
-    top_k=3
-):
-
-    index, documents = load_rag()
-
-    query_embedding = np.array(
-        [create_embedding(query)]
-    ).astype("float32")
-
-    distances, indices = index.search(
-        query_embedding,
-        top_k
-    )
+    for keyword, file_path in keyword_mapping.items():
+        if keyword in query:
+            selected_files.add(file_path)
 
     results = []
 
-    for idx in indices[0]:
+    for file_path in selected_files:
 
-        if (
-            idx >= 0 and
-            idx < len(documents)
-        ):
+        if os.path.exists(file_path):
 
-            results.append(
-                documents[idx]
-            )
+            with open(file_path, "r", encoding="utf-8") as file:
+                results.append(file.read()[:1000])
 
-    return results
+    return results[:top_k]
