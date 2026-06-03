@@ -18,34 +18,16 @@ class ChatRequest(BaseModel):
 @router.post("/")
 def chat(request: ChatRequest):
 
-    patient_context = ""
+    # Check if patient analysis exists
+    if store.latest_analysis is None:
 
-    if store.latest_analysis:
-
-        patient_context = f"""
-Patient Analysis:
-
-Disease Status:
-{store.latest_analysis.get('disease_status')}
-
-Risk Score:
-{store.latest_analysis.get('risk_score')}
-
-Symptoms:
-{', '.join(store.latest_analysis.get('symptoms', []))}
-
-Conditions:
-{', '.join(store.latest_analysis.get('conditions', []))}
-
-Medications:
-{', '.join(store.latest_analysis.get('medications', []))}
-
-Recommendation:
-{store.latest_analysis.get('recommendation')}
-
-Xray Result:
-{store.latest_analysis.get('image_analysis', {}).get('prediction')}
-"""
+        return {
+            "response": (
+                "Please upload and analyze a patient report first "
+                "before asking patient-specific questions."
+            ),
+            "evidence": []
+        }
 
     question = request.message.lower()
 
@@ -62,7 +44,10 @@ Xray Result:
         "symptoms",
         "recommendation",
         "xray",
-        "x-ray"
+        "x-ray",
+        "diagnosis",
+        "treatment",
+        "report"
     ]
 
     use_patient_context = any(
@@ -72,6 +57,7 @@ Xray Result:
 
     evidence = []
 
+    # Only use RAG for general medical questions
     if not use_patient_context:
 
         evidence = retrieve_documents(
@@ -85,38 +71,32 @@ Xray Result:
         else "No additional medical evidence."
     )
 
+    patient_context = f"""
+Current Patient Analysis:
+
+{store.latest_analysis}
+"""
+
     context = f"""
 You are an AI Clinical Assistant.
 
-IMPORTANT RULES:
+STRICT RULES:
 
-1. If the question refers to the current patient,
-use Patient Analysis first.
+1. Use Patient Analysis as the primary source.
+2. Do NOT invent diseases, medications, diagnoses, or treatments.
+3. If medications are empty, say:
+   "No medications are currently prescribed."
+4. Only mention medications present in Patient Analysis.
+5. If patient is LOW RISK, clearly state that.
+6. If patient is healthy, clearly state that.
+7. Use Medical Evidence only for general medical questions.
+8. If information is unavailable, say:
+   "Information not available in the patient analysis."
 
-2. Do not invent diseases,
-medications, or treatments.
-
-3. If Medications are empty,
-say no medications are currently prescribed.
-
-4. If medications exist,
-only mention those medications.
-
-5. Never suggest new medications
-unless explicitly prescribed in the
-patient analysis.
-
-6. If asked for medication,
-return only the medications listed
-in Patient Analysis.
-
-7. Use Medical Evidence only for
-general medical questions.
-
-Patient Analysis:
+PATIENT ANALYSIS:
 {patient_context}
 
-Medical Evidence:
+MEDICAL EVIDENCE:
 {evidence_text}
 """
 

@@ -13,22 +13,24 @@ client = Groq(
 def generate_response(context, question):
 
     prompt = f"""
-You are an AI-powered clinical assistant.
+You are an AI clinical assistant.
 
-Use the provided medical context to answer the user's question.
-
-Medical Context:
+Patient Analysis:
 {context}
 
 User Question:
 {question}
 
-Give:
-- possible condition
-- recommendation
-- evidence-backed response
+IMPORTANT:
+Only answer using the patient analysis above.
+Do not invent diseases, medications, or diagnoses.
+If the patient is low risk, say so.
+If no medications are prescribed, say so.
 
-Keep the response concise and professional.
+Provide:
+1. Possible condition
+2. Recommendation
+3. Supporting evidence
 """
 
     if client is None:
