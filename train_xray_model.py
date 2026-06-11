@@ -105,5 +105,5 @@ torch.save(
     model.state_dict(),
     "models/xray_model.pth"
 )
-
+print(train_dataset.class_to_idx)
 print("Model Saved")

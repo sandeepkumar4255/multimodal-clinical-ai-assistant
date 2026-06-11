@@ -10,6 +10,5 @@ uploads/
 .vscode/
 
 datasets/chest_xray/
-build_vector_store.py
 vector_store/faiss.index
 vector_store/documents.pkl
