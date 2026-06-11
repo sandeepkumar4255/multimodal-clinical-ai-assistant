@@ -1,14 +1,36 @@
+# Virtual Environment
 venv/
+.venv/
 
+# Python Cache
 __pycache__/
 *.pyc
+*.pyo
+*.pyd
 
+# Environment Variables
 .env
 
-uploads/
-
+# VS Code
 .vscode/
 
+# Uploads
+uploads/
+
+# Datasets
+datasets/
 datasets/chest_xray/
+
+# Vector Store
 vector_store/faiss.index
 vector_store/documents.pkl
+
+# Cache Folders
+*/__pycache__/
+
+# Logs
+*.log
+
+# OS Files
+.DS_Store
+Thumbs.db
