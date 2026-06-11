@@ -6,7 +6,8 @@ python-dotenv
 
 pymupdf
 pillow
-
+torch
+torchvision
 pandas
 numpy
 scikit-learn
