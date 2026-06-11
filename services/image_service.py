@@ -52,7 +52,6 @@ model.load_state_dict(
 
 model.eval()
 
-
 transform = transforms.Compose([
     transforms.Resize((128, 128)),
     transforms.ToTensor()
@@ -81,24 +80,25 @@ def analyze_xray(image_path):
             1
         )
 
+        print("=" * 50)
+        print("Image:", image_path)
+        print("Outputs:", outputs)
+        print("Probabilities:", probabilities)
+        print("Predicted Class:", predicted.item())
+        print("Confidence:", confidence.item())
+        print("=" * 50)
+
     predicted_class = predicted.item()
 
-    print("Image:", image_path)
-    print("Predicted Class:", predicted_class)
-    print("Confidence:", confidence.item())
+    class_names = {
+        0: "NORMAL",
+        1: "PNEUMONIA"
+    }
 
-    if predicted_class == 0:
-
-        return {
-            "prediction": "NORMAL",
-            "confidence": round(
-                float(confidence.item()),
-                2
-            )
-        }
+    prediction = class_names[predicted_class]
 
     return {
-        "prediction": "PNEUMONIA",
+        "prediction": prediction,
         "confidence": round(
             float(confidence.item()),
             2

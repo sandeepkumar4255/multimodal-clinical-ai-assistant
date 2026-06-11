@@ -49,7 +49,16 @@ train_dataset = datasets.ImageFolder(
     r"C:\multimodal_dataset_backup\chest_xray\train",
     transform=transform
 )
+print("Total Images:", len(train_dataset))
+print("Class Mapping:", train_dataset.class_to_idx)
+from collections import Counter
 
+labels = [label for _, label in train_dataset.samples]
+
+distribution = Counter(labels)
+
+print("NORMAL Images:", distribution[0])
+print("PNEUMONIA Images:", distribution[1])
 
 train_loader = DataLoader(
     train_dataset,
@@ -63,14 +72,21 @@ device = torch.device(
 
 model = TinyCNN().to(device)
 
-criterion = nn.CrossEntropyLoss()
+class_weights = torch.tensor(
+    [3875 / 1341, 1.0],
+    dtype=torch.float32
+).to(device)
+
+criterion = nn.CrossEntropyLoss(
+    weight=class_weights
+)
 
 optimizer = optim.Adam(
     model.parameters(),
     lr=0.001
 )
 
-for epoch in range(5):
+for epoch in range(15):
 
     model.train()
 
