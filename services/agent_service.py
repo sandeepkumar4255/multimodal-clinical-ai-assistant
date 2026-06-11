@@ -1,7 +1,5 @@
 from services.nlp_service import extract_medical_entities
 from services.ml_service import predict_heart_risk
-from services.rag_service import retrieve_documents
-from services.image_service import analyze_xray
 from services.pdf_service import extract_pdf_text
 from services.llm_service import generate_response
 
@@ -13,14 +11,14 @@ def run_clinical_pipeline(
     pdf_path=None
 ):
 
-    print("STEP 0 - PIPELINE STARTED")
+    print("PIPELINE STARTED")
 
     patient_notes = text or ""
     pdf_summary = None
 
     if pdf_path:
         try:
-            print("STEP 1 - PDF EXTRACTION")
+            print("PDF EXTRACTION")
 
             pdf_text = extract_pdf_text(pdf_path)
 
@@ -36,40 +34,24 @@ def run_clinical_pipeline(
             print("PDF ERROR:", str(e))
             pdf_summary = None
 
-    print("STEP 2 - NLP")
+    print("NLP EXTRACTION")
 
     entities = extract_medical_entities(patient_notes)
 
-    print("STEP 3 - ML")
+    print("HEART RISK PREDICTION")
 
     risk_score = predict_heart_risk(patient_data)
 
     print("RISK SCORE:", risk_score)
 
-    if risk_score < 0.30:
+    evidence = []
 
-        evidence = []
-
-    else:
-
-        print("STEP 4 - RAG")
-
-        evidence = retrieve_documents(
-            patient_notes,
-            top_k=2
-        )
-
-    print("STEP 5 - LLM")
+    print("LLM RESPONSE")
 
     recommendation = generate_response(
-        context="\n\n".join(evidence) if evidence else patient_notes,
+        context=patient_notes,
         question=patient_notes
     )
-
-    image_result = {
-        "prediction": "UNKNOWN",
-        "confidence": 0.0
-    }
 
     if risk_score < 0.30:
         disease_status = "LOW RISK"
@@ -78,20 +60,13 @@ def run_clinical_pipeline(
     else:
         disease_status = "HIGH RISK"
 
-    if image_path:
+    # Render-safe image response
+    image_result = {
+        "prediction": "ANALYSIS DISABLED IN CLOUD VERSION",
+        "confidence": 0.0
+    }
 
-        print("STEP 6 - XRAY")
-
-        # TEMPORARY TEST
-        image_result = {
-            "prediction": "TEST",
-            "confidence": 1.0
-        }
-
-        # COMMENT THIS FOR NOW
-        # image_result = analyze_xray(image_path)
-
-    print("STEP 7 - RETURNING RESULT")
+    print("PIPELINE COMPLETED")
 
     return {
         "disease_status": disease_status,
