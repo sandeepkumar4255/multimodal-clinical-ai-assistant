@@ -37,70 +37,86 @@ class TinyCNN(nn.Module):
         return x
 
 
-device = torch.device(
-    "cuda" if torch.cuda.is_available() else "cpu"
-)
-
-model = TinyCNN().to(device)
-
-model.load_state_dict(
-    torch.load(
-        "models/xray_model.pth",
-        map_location=device
-    )
-)
-
-model.eval()
-
 transform = transforms.Compose([
     transforms.Resize((128, 128)),
     transforms.ToTensor()
 ])
 
 
+def load_model():
+
+    device = torch.device("cpu")
+
+    model = TinyCNN()
+
+    model.load_state_dict(
+        torch.load(
+            "models/xray_model.pth",
+            map_location=device
+        )
+    )
+
+    model.eval()
+
+    return model
+
+
 def analyze_xray(image_path):
 
-    image = Image.open(image_path).convert("RGB")
+    try:
 
-    image = transform(image)
+        device = torch.device("cpu")
 
-    image = image.unsqueeze(0).to(device)
+        model = load_model()
 
-    with torch.no_grad():
+        image = Image.open(image_path).convert("RGB")
 
-        outputs = model(image)
+        image = transform(image)
 
-        probabilities = torch.softmax(
-            outputs,
-            dim=1
-        )
+        image = image.unsqueeze(0)
 
-        confidence, predicted = torch.max(
-            probabilities,
-            1
-        )
+        with torch.no_grad():
+
+            outputs = model(image)
+
+            probabilities = torch.softmax(
+                outputs,
+                dim=1
+            )
+
+            confidence, predicted = torch.max(
+                probabilities,
+                1
+            )
+
+        predicted_class = predicted.item()
+
+        class_names = {
+            0: "NORMAL",
+            1: "PNEUMONIA"
+        }
+
+        prediction = class_names[predicted_class]
 
         print("=" * 50)
         print("Image:", image_path)
-        print("Outputs:", outputs)
-        print("Probabilities:", probabilities)
-        print("Predicted Class:", predicted.item())
+        print("Prediction:", prediction)
         print("Confidence:", confidence.item())
         print("=" * 50)
 
-    predicted_class = predicted.item()
+        return {
+            "prediction": prediction,
+            "confidence": round(
+                float(confidence.item()),
+                2
+            )
+        }
 
-    class_names = {
-        0: "NORMAL",
-        1: "PNEUMONIA"
-    }
+    except Exception as e:
 
-    prediction = class_names[predicted_class]
+        print("XRAY ERROR:", str(e))
 
-    return {
-        "prediction": prediction,
-        "confidence": round(
-            float(confidence.item()),
-            2
-        )
-    }
+        return {
+            "prediction": "ERROR",
+            "confidence": 0.0
+        }
