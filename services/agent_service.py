@@ -13,26 +13,38 @@ def run_clinical_pipeline(
     pdf_path=None
 ):
 
+    print("STEP 0 - PIPELINE STARTED")
+
     patient_notes = text or ""
     pdf_summary = None
 
     if pdf_path:
         try:
+            print("STEP 1 - PDF EXTRACTION")
+
             pdf_text = extract_pdf_text(pdf_path)
+
             pdf_summary = pdf_text[:1200]
+
             patient_notes = (
                 f"{patient_notes}\n\n{pdf_text}"
                 if patient_notes
                 else pdf_text
             )
-        except Exception:
+
+        except Exception as e:
+            print("PDF ERROR:", str(e))
             pdf_summary = None
 
-    # NLP Extraction
+    print("STEP 2 - NLP")
+
     entities = extract_medical_entities(patient_notes)
 
-    # ML Prediction
+    print("STEP 3 - ML")
+
     risk_score = predict_heart_risk(patient_data)
+
+    print("RISK SCORE:", risk_score)
 
     if risk_score < 0.30:
 
@@ -40,12 +52,15 @@ def run_clinical_pipeline(
 
     else:
 
-        evidence = retrieve_documents(
-        patient_notes,
-        top_k=2
-    )
+        print("STEP 4 - RAG")
 
-    # LLM Recommendation
+        evidence = retrieve_documents(
+            patient_notes,
+            top_k=2
+        )
+
+    print("STEP 5 - LLM")
+
     recommendation = generate_response(
         context="\n\n".join(evidence) if evidence else patient_notes,
         question=patient_notes
@@ -65,33 +80,18 @@ def run_clinical_pipeline(
 
     if image_path:
 
-        image_result = analyze_xray(image_path)
+        print("STEP 6 - XRAY")
 
-        if image_result["prediction"] == "NORMAL":
+        # TEMPORARY TEST
+        image_result = {
+            "prediction": "TEST",
+            "confidence": 1.0
+        }
 
-            if disease_status == "LOW RISK":
+        # COMMENT THIS FOR NOW
+        # image_result = analyze_xray(image_path)
 
-                recommendation = (
-                    "Image appears normal. Continue routine monitoring "
-                    "and follow a healthy lifestyle."
-                )
-
-            else:
-
-                recommendation = (
-                    "The X-ray appears normal, but clinical risk factors "
-                    "indicate elevated cardiovascular risk. "
-                    "Recommend specialist review and follow-up."
-                )
-
-        elif image_result["prediction"] == "PNEUMONIA":
-
-            disease_status = "HIGH RISK"
-
-            recommendation = (
-                "Image findings suggest pneumonia. "
-                "Urgent clinical review and treatment are advised."
-            )
+    print("STEP 7 - RETURNING RESULT")
 
     return {
         "disease_status": disease_status,
